@@ -1,18 +1,19 @@
-﻿using System.IO;
+﻿using System;
 
 namespace EPAM.Core.ReportHelper
 {
-    public static class ReportNameHelper
+    public static class ArrayHelper
     {
-        public static string NormalizeFileName(string name, char replChar)
+        public static void Fill<T>(T[] array, T value)
         {
-            var invalidChars = Path.GetInvalidFileNameChars();
-            foreach (var c in invalidChars)
+#if NETCOREAPP2_0 || NETCOREAPP2_1
+            Array.Fill<T>(array, value);
+#else
+            for (var i = array.GetLowerBound(0); i <= array.GetUpperBound(0); i++)
             {
-                name = name.Replace(c, replChar);
+                array[i] = value;
             }
-
-            return name;
+#endif
         }
     }
 }
